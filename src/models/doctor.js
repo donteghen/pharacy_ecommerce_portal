@@ -3,7 +3,8 @@ const validator = require('validator');
 const jwt = require('jsonwebtoken');
 const keys = require('../../config/env/keys');
 const bycrypt = require('bcryptjs');
-const userSchema = new mongoose.Schema({
+//const Pharmacy = require('./pharmacy')
+const doctorSchema = new mongoose.Schema({
     avatar:{
         type:Buffer
     },
@@ -25,14 +26,6 @@ const userSchema = new mongoose.Schema({
             }
         }
     },
-    address:{
-        type: String,
-        required:[true, 'Addresss is required!'],
-    },
-    city:{
-        type:String,
-        required:[true, 'City is required!'],
-    },
     password:{
         type:String,
         required : [true, 'Password is required'],
@@ -44,7 +37,7 @@ const userSchema = new mongoose.Schema({
             }
         }
     },
-    isAdmin:{
+    isVerified:{
         type:Boolean,
         default:false
     },
@@ -59,52 +52,50 @@ const userSchema = new mongoose.Schema({
     timestamps:true,
 }
 );
-userSchema.virtual('orders', {
+doctorSchema.virtual('orders', {
     ref:'Order',
     localField:'_id',
-    foreignField:'customer'
+    foreignField:'doctor'
 })
 
-// generate a token for a given user during sign up and login
-userSchema.methods.generateToken = async function(){
-    const user = this;
-    const token = await jwt.sign({_id:user._id.toString()}, keys.jwtSecret);
-    user.tokens = user.tokens.concate({token});
-    await user.save();
+// generate a token for a given doctor during sign up and login
+doctorSchema.methods.generateToken = async function(){
+    const doctor = this;
+    const token = await jwt.sign({_id:doctor._id.toString()}, keys.jwtSecret);
+    doctor.tokens = doctor.tokens.concate({token});
+    await doctor.save();
     return token;
 }
- 
+
 // modify the request boody object before sending it to the client
-userSchema.methods.toJSON = function(){
-    const user  = this;
-    const userObject = user.toObject()
-    delete userObject.password;
-    delete userObject.tokens;
-    return userObject;
+doctorSchema.methods.toJSON = function(){
+    const doctor  = this;
+    const doctorObject = doctor.toObject()
+    delete doctorObject.password;
+    delete doctorObject.tokens;
+    return doctorObject;
 }
 
-// get users credentials
-userSchema.statics.getCredentials = async function(email, password){
-    const user = await User.find({email:email});
-    if(!user){
-        throw new Error('user doesn\'t exist')
+// get doctors credentials
+doctorSchema.statics.getCredentials = async function(email, password){
+    const doctor = await Doctor.find({email:email});
+    if(!doctor){
+        throw new Error('doctor doesn\'t exist')
     }
-    const isMatch = await bycrypt.compare(password, user.password) ;
+    const isMatch = await bycrypt.compare(password, doctor.password) ;
     if(!isMatch){
         throw new Error('Authentication failed')
     }
-    return user;
+    return doctor;
 }
-// check if user changed password for every update.
-userSchema.pre('save', async function(next){
-    const user = this;
-    if(user.isModified('password')){
-        user.password = await bycrypt.hash(user.password, 8)
+// check if doctor changed password for every update.
+doctorSchema.pre('save', async function(next){
+    const doctor = this;
+    if(doctor.isModified('password')){
+        doctor.password = await bycrypt.hash(doctor.password, 8)
     }
     next()
 })
 
-
-
-const User = mongoose.model('User', userSchema);
-module.exports = User;
+const Doctor = mongoose.model('Doctor', doctorSchema);
+module.exports = Doctor;
