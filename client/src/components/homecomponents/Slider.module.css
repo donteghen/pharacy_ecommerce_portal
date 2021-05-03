@@ -1,0 +1,11 @@
+img{
+    width:100%;
+    height: 500px;
+}
+.slider_wrapper_center{
+    padding: 0 80px;
+}
+.slider_wrapper{
+    margin: 6px 0;
+    text-align: center;
+}

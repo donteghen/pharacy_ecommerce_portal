@@ -7,7 +7,7 @@ const userAuth = async function(req, res, next){
         const decoded = jwt.verify(token, keys.jwtSecret);
         const user  = await User.findOne({_id:decoded._id, 'tokens.token':token});
         if(!user){
-            throw new Error()
+            res.status(404).send()
         }
         req.user = user; //  make user available in request object
         req.token = token   //  make token available in request object

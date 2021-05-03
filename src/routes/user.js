@@ -44,13 +44,34 @@ router.post('/api/users', async (req, res)=>{
             email:req.body.email,
             password:req.body.password
         });
-        const user = await user.save()
+        const user = await newUser.save()
         res.status(201).send(user)
     } catch (error) {
         res.status(400).send('sign up failed')
     }
 });
 
+// route for logging user in
+router.post('/api/users/login', async (req, res)=>{
+    try {
+        const loginUser = await User.getCredentials(req.body.email, req.body.password)
+         const token = loginUser.generateToken();
+         res.send({loginUser, token})
+    } catch (error) {
+        res.status(400).send({error:error})
+    }
+})
+
+//route to log user out
+router.post('/api/users/profile/logout', userAuth, async (req, res)=>{
+    try {
+        req.user.tokens = req.user.tokens.filter(token => token.token !== req.token);
+        await req.user.save();
+        res.status(200).send();
+    } catch (error) {
+        res.status(500).send();
+    }
+})
 
 // route for posting user avatar
 router.post('/api/users/profile/avatar', userAuth, upload.single('avatar'), async(req, res)=>{

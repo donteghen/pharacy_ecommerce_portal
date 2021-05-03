@@ -1,0 +1,29 @@
+.cat_wrapper{
+    margin: 10px 0;
+    padding: 10px 0;
+    width:95%
+}
+.btn_viewAll{
+    float: right;
+}
+.btn_viewAll:hover{
+    background-color: #40a9ff;
+    color:white;
+}
+.cat_wrapper_title{
+    display: flex;
+    margin: 10px 0;
+    padding: 10px 0;
+    width: 90%;
+}
+.cat_img_mixer{
+    display: flex;
+    background-color: #E3EFED;
+    margin: 0 2px;
+}
+.cat_img_mixer img{
+   float: right;
+}
+.cat_img_mixer:hover{
+    color:blue
+}
