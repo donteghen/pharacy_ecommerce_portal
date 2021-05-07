@@ -1,32 +1,37 @@
 import axios from 'axios';
 import {LOGIN_USER, LOGOUT_USER, GET_USER, SIGNUP_USER} from './types'
 
+const url= 'http://localhost:5000';
 export const getUser = (token) => async (dispatch) =>{
-    const res = await axios.get('/api/users/profile', {
-        Headers:{
-            Authorization:'Bearer' + token 
+    const res = await axios.get(url+'/api/users/profile', {
+        headers:{
+            Authorization:`Bearer ${token}` 
         }
     })
     dispatch({type:GET_USER, payload:res.data})
 }
-export const loginUser = (email, password) => async (dispatch) => {
-    const res = await axios.post('/api/users/login', {email:email, password:password});
+export const loginUser = (email, password, history) => async (dispatch) => {
+    const res = await axios.post(url+'/api/users/login', {email:email, password:password});
+    
     localStorage.setItem('user_token', res.data.token)
-    dispatch({type:LOGIN_USER, payload:res.data.user})
+    history.goBack()
+    dispatch({type:LOGIN_USER, payload:res.data})
 }
 
-export const logoutUser = () => async (dispatch) =>{
+export const logoutUser = (history) => async (dispatch) =>{
     const token = localStorage.getItem('user_token');
-    await axios.post('/api/users/profile/logout', {
+    await axios.post('http://localhost:5000/api/users/profile/logout', {
         headers:{
-            Authorization:'Bearer' + token 
+            Authorization:`Bearer ${token}`  
         }
     })
-    dispatch({type:LOGOUT_USER, payload:{}})
+    localStorage.removeItem('user_token')
+    history.push('/')
+    dispatch({type:LOGOUT_USER})
 } 
 
-export const signupUser = (newUser) => async (dispatch) =>{
-    const res =  await axios('/api/users', {
+export const signupUser = (newUser, history) => async (dispatch) =>{
+    const res =  await axios.post(url+'/api/users', {
         name:newUser.name,
         surName: newUser.surName,
         address: newUser.address,
@@ -34,6 +39,7 @@ export const signupUser = (newUser) => async (dispatch) =>{
         email: newUser.email,
         password: newUser.password,
     })
-    localStorage.setItem('user_token', res.data.token)
+    localStorage.setItem('user_token', res.data.token);
+    history.goBack()
     dispatch({type:SIGNUP_USER, payload:res.data})
 }

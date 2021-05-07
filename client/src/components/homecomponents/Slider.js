@@ -1,36 +1,23 @@
 import React from 'react';
-import Slider from "react-slick";
-import styles from'./Slider.module.css'
-const settings = {
-    dots: true,
-    infinite: true,
-    autoplay: true,
-    speed: 800,
-    autoplaySpeed: 3000,
-    slidesToShow: 1,
-    slidesToScroll: 1
-};
+import styles from './Slider.module.css'
+import SwiperCore, {Pagination, Autoplay} from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import "swiper/swiper.min.css";
+import "swiper/components/pagination/pagination.min.css";
+
+
+const images = ['https://source.unsplash.com/random', 'https://source.unsplash.com/daily', 'https://source.unsplash.com/user/erondu/daily', 'https://source.unsplash.com/weekly?water']
 
 const HomeSlider = (props) =>{
+    SwiperCore.use([Pagination, Autoplay]);
     return (
-        <div className={styles.slider_wrapper}>
-           <div className={styles.slider_wrapper_center}>
-                <Slider {...settings}>
-                    <div>
-                        <img src='https://source.unsplash.com/random' alt='1' />
-                    </div>
-                    <div>
-                        <img src='https://source.unsplash.com/daily' alt='2' />
-                    </div>
-                    <div>
-                        <img src='https://source.unsplash.com/user/erondu/daily' alt='2'/>
-                    </div>
-                    <div>
-                        <img src='https://source.unsplash.com/weekly?water' alt='4'/>
-                    </div>
-                </Slider>
-           </div>
-        </div>
+        <Swiper 
+        centeredSlides={true} 
+        autoplay={{"delay": 3000,"disableOnInteraction": false, }}
+        parallax={{'enabled':true}}
+        pagination={{ clickable: true }} >
+             {images.map((x, index )=> <SwiperSlide key={index}><img className={styles.main_slider_img} src={x} alt={index} /></SwiperSlide>)}
+        </Swiper>
     )
 }
 export default HomeSlider

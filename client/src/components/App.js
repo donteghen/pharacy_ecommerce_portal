@@ -6,6 +6,8 @@ import Home from './home';
 import MainHeader from './homecomponents/Header';
 import Login from './authcomponents/login';
 import SignUp from './authcomponents/signup';
+import UserProfile from './profiles/userProfile';
+
 
 
 const App = (props) =>{
@@ -17,6 +19,7 @@ const App = (props) =>{
       <Switch>
         <Route path='/login' component={Login} />
         <Route path='/signup' component={SignUp}/>
+        <Route path='/userprofile'component={UserProfile} />
         <Route path='/' component={Home}/>
       </Switch>
     </Router>

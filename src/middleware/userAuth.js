@@ -4,8 +4,11 @@ const User = require('../models/user');
 const userAuth = async function(req, res, next){
     try {
         const token = req.header('Authorization').replace('Bearer ', '')
+       
         const decoded = jwt.verify(token, keys.jwtSecret);
+        //console.log(decoded)
         const user  = await User.findOne({_id:decoded._id, 'tokens.token':token});
+        //console.log(user)
         if(!user){
             res.status(404).send()
         }
@@ -13,7 +16,7 @@ const userAuth = async function(req, res, next){
         req.token = token   //  make token available in request object
         next()
     } catch (error) {
-        res.status(401).send({"error": "authentication required"})
+        res.status(400).send( "authentication required")
     }
 }
 module.exports = userAuth;

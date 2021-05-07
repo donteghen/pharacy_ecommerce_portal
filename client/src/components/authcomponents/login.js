@@ -3,25 +3,30 @@ import { Divider } from 'antd';
 import React, { useState } from 'react';
 import {useHistory} from 'react-router-dom';
 import { validateLogin } from '../../utils/validateLogin';
+import {connect} from 'react-redux';
+import * as actions from '../../actions'
 
 const Login = (props) =>{
     const history = useHistory()
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [errors, setErrors] = useState({}) 
+    
     const handleClick = () =>{
         history.push('/signup')
     }
     const handleSubmit = (e) =>{
       e.preventDefault();
-      console.log({email, password})
       const errors = validateLogin({email, password})
       if(Object.keys(errors).length === 0) {
-        console.log('good to go')
+        props.loginUser(email, password, history) 
       }
-      console.log(errors)
-      //props.signupUser(values)
+      else{
+        setErrors({errors})
+      }
     }
     return (
+      
         <div className="container" style={{padding:'40px 0'}}>
         <div style={{textAlign:'center'}}>
         <Divider style={{ borderWidth: 5, borderColor: '#2bbbad',fontSize:'30px', fontStyle:'italic'  }}>Sign In</Divider>
@@ -30,12 +35,15 @@ const Login = (props) =>{
           <div className="row">
             <div className="input-field col s12">
               <input id="email" type="email" value={email} onChange={(e)=>setEmail(e.target.value)}/>
+              {errors.errors && errors.errors.email && <span style={{color:'red'}}>{errors.errors.email}</span>}
               <label className='active' for="email">Email</label>
             </div>
+            
           </div>
           <div className="row">
             <div className="input-field col s12">
               <input id="password" type="password" value={password} onChange={(e)=>setPassword(e.target.value)}/>
+              {errors.errors && errors.errors.password && <span style={{color:'red'}}>{errors.errors.password}</span>}
               <label className='active' for="password">Password</label>
             </div>
           </div>
@@ -58,4 +66,4 @@ const Login = (props) =>{
       </div>
     )
 }
-export default Login
+export default connect(null, actions)(Login)

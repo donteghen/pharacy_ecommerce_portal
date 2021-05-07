@@ -1,8 +1,10 @@
 const userAuth = require('../middleware/userAuth');
 const User = require('../models/user');
-const router = require('express').Router();
+const express = require('express')
 const multer = require('multer');
 const sharp = require('sharp');
+const router = new express.Router()
+
 const upload = multer({
     limits:2500000,
     fileFilter(req, res, cb){
@@ -44,10 +46,14 @@ router.post('/api/users', async (req, res)=>{
             email:req.body.email,
             password:req.body.password
         });
+        const checkUser = await User.findOne({email:newUser.email})
+        if(checkUser){
+            res.status(400).send({error:'email already exists!'})
+        }
         const user = await newUser.save()
         res.status(201).send(user)
     } catch (error) {
-        res.status(400).send('sign up failed')
+        res.status(400).send({error:error.message})
     }
 });
 
@@ -55,19 +61,20 @@ router.post('/api/users', async (req, res)=>{
 router.post('/api/users/login', async (req, res)=>{
     try {
         const loginUser = await User.getCredentials(req.body.email, req.body.password)
-         const token = loginUser.generateToken();
+         const token = await loginUser.generateToken();
          res.send({loginUser, token})
     } catch (error) {
-        res.status(400).send({error:error})
+        res.status(400).send({error:"No such user exists"})
     }
 })
 
 //route to log user out
 router.post('/api/users/profile/logout', userAuth, async (req, res)=>{
+    console.log(req.token, req.user)
     try {
         req.user.tokens = req.user.tokens.filter(token => token.token !== req.token);
         await req.user.save();
-        res.status(200).send();
+        res.status(200).send({message:"success"});
     } catch (error) {
         res.status(500).send();
     }

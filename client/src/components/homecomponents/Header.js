@@ -1,12 +1,19 @@
-import React from 'react';
-import {Link} from 'react-router-dom';
+import React, { useEffect } from 'react';
+import {Link, useHistory} from 'react-router-dom';
 import {connect} from 'react-redux'
 import styles from './Header.module.css'
 import * as actions from '../../actions'
+
 const MainHeader = (props) =>{
-  if(localStorage.getItem('user_token')){
-    console.log(props.getUser())
-  }
+  //console.log(props)
+  const history = useHistory();
+  useEffect(()=>{
+    if(localStorage.getItem('user_token')){
+      const token = localStorage.getItem('user_token');
+      props.getUser(token);
+    }
+    //console.log(props)
+  })
   return (
       <div className={styles.wrapper}>
         <Link to='/' className={styles.header_logo}>LOGO</Link>
@@ -17,7 +24,8 @@ const MainHeader = (props) =>{
         </span>
         <span className={styles.header_right}>
           <Link to='/' ><i className="material-icons">search</i></Link>
-          <Link to='/login' ><i className="material-icons">account_circle</i></Link>
+         {!props.auth ?  (<Link to='/login'><i className="material-icons">account_circle</i></Link>):
+         (<span style={{cursor:'pointer'}} onClick={()=> props.logoutUser(history)}><i className="material-icons">eject</i></span>)}
           <Link to='/' ><i className="material-icons">shopping_cart</i></Link>
         </span>
       </div>

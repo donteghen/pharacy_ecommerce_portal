@@ -18,9 +18,9 @@ const userSchema = new mongoose.Schema({
     email:{
         type:String,
         required:[true, 'Email is required!'],
-        unique: true,
+        unique: [true, 'Email already exists!'],
         validate(value){
-            if(validator.isEmail(value)){
+            if(!validator.isEmail(value)){
                 throw new Error('Email is invalid')
             }
         }
@@ -69,7 +69,8 @@ userSchema.virtual('orders', {
 userSchema.methods.generateToken = async function(){
     const user = this;
     const token = await jwt.sign({_id:user._id.toString()}, keys.jwtSecret);
-    user.tokens = user.tokens.concate({token});
+    
+    user.tokens = user.tokens.concat({token});
     await user.save();
     return token;
 }
@@ -85,7 +86,9 @@ userSchema.methods.toJSON = function(){
 
 // get users credentials
 userSchema.statics.getCredentials = async function(email, password){
-    const user = await User.find({email:email});
+    console.log(email)
+    console.log(password)
+    const user = await User.findOne({email:email});
     if(!user){
         throw new Error('user doesn\'t exist')
     }

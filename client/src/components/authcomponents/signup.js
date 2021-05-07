@@ -3,8 +3,10 @@ import { Divider } from 'antd';
 import React, { useState } from 'react';
 import {useHistory} from 'react-router-dom';
 import { validate } from '../../utils/vaidate';
-
+import {connect} from 'react-redux';
+import * as actions from '../../actions'
 const SignUp = (props) =>{
+  
     const history = useHistory()
     const [name, setName] = useState('');
     const [surName, setSurName] = useState('');
@@ -12,20 +14,19 @@ const SignUp = (props) =>{
     const [city, setCity] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [errors, setErrors] = useState({})
     const handleClick = ()=>{
         history.push('/login')
     }
     const handleSubmit = (e) =>{
       e.preventDefault();
-      console.log({name, surName, address, city, email, password})
-      const errors = validate({name, surName, address, city, email, password});
-      if(Object.keys(errors).length === 0) {
-        console.log('good to go')
+      const validationErrors = validate({name, surName, address, city, email, password});
+      if(Object.keys(validationErrors).length === 0) {
+        props.signupUser({name, surName, address, city, email, password}, history)
       }
-
-      console.log(errors)
-      //props.signupUser(values)
-      
+      else{
+          setErrors(validationErrors)
+      }
     }
     return (
         <div className="container" style={{padding:'40px 0'}}>
@@ -85,4 +86,4 @@ const SignUp = (props) =>{
       </div>
     )
 }
-export default SignUp
+export default connect(null, actions)(SignUp)

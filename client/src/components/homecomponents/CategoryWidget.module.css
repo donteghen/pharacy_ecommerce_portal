@@ -1,29 +1,34 @@
-.cat_wrapper{
-    margin: 10px 0;
-    padding: 10px 0;
-    width:95%
-}
-.btn_viewAll{
-    float: right;
-}
-.btn_viewAll:hover{
-    background-color: #40a9ff;
-    color:white;
-}
-.cat_wrapper_title{
+.displaycard{
     display: flex;
-    margin: 10px 0;
-    padding: 10px 0;
-    width: 90%;
+    background-color:#c2d9ee
 }
-.cat_img_mixer{
-    display: flex;
-    background-color: #E3EFED;
-    margin: 0 2px;
+.displaycard_item_left{
+    width:30%;
+    font-style: italic;
+    font-weight: bolder;
+    margin-left: 4px;
 }
-.cat_img_mixer img{
-   float: right;
+.displaycard_item_right{
+    width:70%
 }
-.cat_img_mixer:hover{
-    color:blue
+
+.cat_Slider_img{
+    width:95%;
+    height: 200px;
+    border-radius: 10px 20px;
+    padding: 2px 2px;
+}
+.displaycard:hover{
+    opacity: 0.8;
+
+}
+.displaycard button{
+    position: absolute;
+    bottom: 10%;
+    width: 70px;
+    height: 25px;
+    background-color:#0275d8;
+    border-radius: 15px 15px;
+    outline: none;
+    border: none;
 }
