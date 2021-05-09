@@ -48,6 +48,8 @@ const userSchema = new mongoose.Schema({
         type:Boolean,
         default:false
     },
+    user_orders:[mongoose.Schema.Types.ObjectId],
+    user_cart: [mongoose.Schema.Types.ObjectId],
     tokens : [{
         token:{
             type:String,

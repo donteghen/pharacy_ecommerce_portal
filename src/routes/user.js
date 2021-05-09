@@ -7,13 +7,36 @@ const router = new express.Router()
 
 const upload = multer({
     limits:2500000,
-    fileFilter(req, res, cb){
-        if(!file.originalName.match('/\.(png|jpg|jpeg)$/i')){
+    fileFilter(req, file, cb){
+        if(!file.originalname.match(/\.(png|jpg|jpeg)$/i)){ 
             cb(new Error('file doesn\'t match '))
         }
-        cb(underfined, true)
+        cb(undefined, true)
     }
 })
+
+
+// get all users
+router.get('/api/users', async (req, res)=>{
+    try {
+        const users = await User.find()
+        if(!users) res.status(404).send({error:'user not found'})
+        res.send(users)
+    } catch (error) {
+        res.status(400).send()
+    }
+})
+// get single users by id
+router.get('/api/users/:id/details', async (req, res)=>{
+    try {
+        const user = await User.findById(req.params.id)
+        if(!user) res.status(404).send({error:'user not found'})
+        res.send(user)
+    } catch (error) {
+        res.status(400).send()
+    }
+})
+
 
 //route for getting user profie
 router.get('/api/users/profile', userAuth, async (req, res)=>{
@@ -25,15 +48,17 @@ router.get('/api/users/profile', userAuth, async (req, res)=>{
 });
 
 // route for serving user avatar
-router.get('/api/users/:id/avatar', async(req, res)=>{
+router.get('/api/users/:id/avatar', async (req, res)=>{
     try {
-        const user = User.findById(req.params.id)
+        const user = await User.findById(req.params.id)
         if(!user) res.status(404).send()
         res.set('Content-Type','image/png')
+        res.send(user.avatar)
     } catch (error) {
         res.status(400).send()
     }
 })
+
 
 //route for creating new user
 router.post('/api/users', async (req, res)=>{
@@ -88,7 +113,7 @@ router.post('/api/users/profile/avatar', userAuth, upload.single('avatar'), asyn
         const user = await req.user.save();
         res.send(user);
     } catch (error) {
-        res.status(400).send('avatar upload failed')
+        res.status(400).send(error.message)
     }
 })
 

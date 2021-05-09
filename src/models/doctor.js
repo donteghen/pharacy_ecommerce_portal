@@ -62,7 +62,7 @@ doctorSchema.virtual('orders', {
 doctorSchema.methods.generateToken = async function(){
     const doctor = this;
     const token = await jwt.sign({_id:doctor._id.toString()}, keys.jwtSecret);
-    doctor.tokens = doctor.tokens.concate({token});
+    doctor.tokens = doctor.tokens.concat({token});
     await doctor.save();
     return token;
 }

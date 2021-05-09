@@ -7,7 +7,7 @@ const pharmaAuth = async function(req, res, next){
         const decoded = jwt.verify(token, keys.jwtSecret);
         const pharma  = await Pharma.findOne({_id:decoded._id, 'tokens.token':token});
         if(!pharma){
-            throw new Error()
+            throw new Error('failed')
         }
         req.pharma = pharma; //  make pharma available in request object
         req.token = token   //  make token available in request object

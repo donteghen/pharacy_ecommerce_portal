@@ -57,7 +57,7 @@ cargoSchema.virtual('orders', {
 cargoSchema.methods.generateToken = async function(){
     const cargo = this;
     const token = await jwt.sign({_id:cargo._id.toString()}, keys.jwtSecret);
-    cargo.tokens = cargo.tokens.concate({token});
+    cargo.tokens = cargo.tokens.concat({token});
     await cargo.save();
     return token;
 }

@@ -1,8 +1,6 @@
 import React from 'react'
 import styles from './SectionHeader.module.css'
 const SectionHeader = (props) =>{
-    console.log(props.first.mainHeader)
-    console.log(styles)
     return (
         <div >
             <div className='row ' >
