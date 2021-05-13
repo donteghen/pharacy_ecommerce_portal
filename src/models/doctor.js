@@ -3,7 +3,6 @@ const validator = require('validator');
 const jwt = require('jsonwebtoken');
 const keys = require('../../config/env/keys');
 const bycrypt = require('bcryptjs');
-//const Pharmacy = require('./pharmacy')
 const doctorSchema = new mongoose.Schema({
     avatar:{
         type:Buffer
@@ -16,12 +15,16 @@ const doctorSchema = new mongoose.Schema({
         type:String,
         required:[true, 'SurName is required!']
     },
+    telephone: {
+        type:String,
+        required:[true, 'telephone number is required!']
+    },
     email:{
         type:String,
         required:[true, 'Email is required!'],
         unique: true,
         validate(value){
-            if(validator.isEmail(value)){
+            if(!validator.isEmail(value)){
                 throw new Error('Email is invalid')
             }
         }
@@ -78,7 +81,7 @@ doctorSchema.methods.toJSON = function(){
 
 // get doctors credentials
 doctorSchema.statics.getCredentials = async function(email, password){
-    const doctor = await Doctor.find({email:email});
+    const doctor = await Doctor.findOne({email:email});
     if(!doctor){
         throw new Error('doctor doesn\'t exist')
     }

@@ -33,6 +33,7 @@ const userSchema = new mongoose.Schema({
         type:String,
         required:[true, 'City is required!'],
     },
+    
     password:{
         type:String,
         required : [true, 'Password is required'],
@@ -88,8 +89,6 @@ userSchema.methods.toJSON = function(){
 
 // get users credentials
 userSchema.statics.getCredentials = async function(email, password){
-    console.log(email)
-    console.log(password)
     const user = await User.findOne({email:email});
     if(!user){
         throw new Error('user doesn\'t exist')

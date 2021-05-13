@@ -5,16 +5,16 @@ const orderSchema = new mongoose.Schema({
         type: [mongoose.Schema.Types.ObjectId],
         required:true
     },
-    customer:{
-        type:mongoose.Schema.types.ObjectId,
+    user:{
+        type:mongoose.Schema.Types.ObjectId,
         required:true
     },
     pharma:{
-        type:mongoose.Schema.types.ObjectId,
+        type:mongoose.Schema.Types.ObjectId,
         required:true
     },
     doctor:{
-        type:mongoose.Schema.types.ObjectId,
+        type:mongoose.Schema.Types.ObjectId,
         required:true
     },
     status:{
@@ -44,10 +44,10 @@ const orderSchema = new mongoose.Schema({
         required:true
     },
     date:{
-        type:Date,
+        type:Date, 
         default:Date.now()
     }
 });
 
-const Order = new mongoose.model('Order', orderSchema);
+const Order =  mongoose.model('Order', orderSchema);
 module.exports = Order

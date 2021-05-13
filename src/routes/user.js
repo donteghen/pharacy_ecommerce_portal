@@ -117,4 +117,19 @@ router.post('/api/users/profile/avatar', userAuth, upload.single('avatar'), asyn
     }
 })
 
+// route for ading new products to cart
+router.patch('/api/user/cart', userAuth, async (req, res) =>{
+    try {
+        if(!req.body.productId){
+            throw new Error('wrong request, select a product to add to cart')
+        }
+
+         req.user.user_cart = req.user.user_cart.concat(req.body.productId)
+        const user = await req.user.save()
+       res.send(req.user.user_cart)
+    } catch (error) {
+        res.status(400).send(error.message)
+    }
+})
+
 module.exports = router

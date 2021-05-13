@@ -25,7 +25,7 @@ const productSchema = new mongoose.Schema({
         required:true,
         trim:true
     },
-    dozaj:{
+    dosage:{
         type:Number,
         required:true
     },
@@ -36,19 +36,20 @@ const productSchema = new mongoose.Schema({
     owner:{
         type: mongoose.Schema.Types.ObjectId
     },
-    category:{
+    category:{ 
         type:String,
         required:true,
         trim:true
     },
     images:[
         {
-            types:Buffer
+            type:String,
+            required:true
         }
     ]
 },{
     timestamps:true
 });
 
-const Product = new mongoose.model('Product', productSchema);
+const Product = mongoose.model('Product', productSchema);
 module.exports = Product

@@ -14,15 +14,15 @@ const pharmaSchema = new mongoose.Schema({
     },
     address: {
         type:String,
-        required:[true, 'SurName is required!']
+        required:[true, 'Address is required!']
     },
     city:{
         type: String,
-        required:true
+        required:[true, 'city is required!']
     },
     telephone:{
         type:String,
-        required:true
+        required:[true, 'Telephone number is required!']
     },
     email:{
         type:String,

@@ -11,12 +11,16 @@ const cargoSchema = new mongoose.Schema({
         type:String,
         required:[true, 'Name is required!']
     },
+    telephone: {
+        type:String,
+        required:[true, 'telephone number is required!']
+    },
     email:{
         type:String,
         required:[true, 'Email is required!'],
         unique: true,
         validate(value){
-            if(validator.isEmail(value)){
+            if(!validator.isEmail(value)){
                 throw new Error('Email is invalid')
             }
         }
@@ -31,6 +35,9 @@ const cargoSchema = new mongoose.Schema({
                 throw new Error("Password can't contain the keyword 'password'")
             }
         }
+    },
+    cargo_order:{
+        type: [mongoose.Schema.Types.ObjectId]
     },
     isVerified:{
         type:Boolean,
@@ -73,7 +80,7 @@ cargoSchema.methods.toJSON = function(){
 
 // get cargos credentials
 cargoSchema.statics.getCredentials = async function(email, password){
-    const cargo = await Cargo.find({email:email});
+    const cargo = await Cargo.findOne({email:email});
     if(!cargo){
         throw new Error('cargo doesn\'t exist')
     }

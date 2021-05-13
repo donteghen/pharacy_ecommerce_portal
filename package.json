@@ -13,7 +13,9 @@
   "author": "Donald Ticha Teghen",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.906.0",
     "bcryptjs": "^2.4.3",
+    "cloudinary": "^1.25.1",
     "concurrently": "^6.0.2",
     "cors": "^2.8.5",
     "express": "^4.17.1",

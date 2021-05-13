@@ -8,7 +8,7 @@ const upload = multer({
     limits:2500000,
     fileFilter(req, file, cb){
         if(!file.originalname.match(/\.(png|jpg|jpeg)$/i)){
-            cb(new Error('Wrong file format'))
+           return cb(new Error('Wrong file format'))
         }
         cb(undefined, true)
     }
@@ -76,7 +76,7 @@ router.post('/api/pharmas', async (req, res)=>{
         const checkPharma = await Pharma.findOne().or([{name:newPharmacy.name}, {email:newPharmacy.email}])
         if(checkPharma){
             console.log(checkPharma)
-            throw new Error('Pharmacy with these details already exists')
+            throw new Error('A Pharmacy with these details already exists')
         }
         const pharma = await newPharmacy.save();
         res.status(201).send(pharma)
