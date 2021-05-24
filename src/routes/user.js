@@ -69,7 +69,8 @@ router.post('/api/users', async (req, res)=>{
             address:req.body.address,
             city:req.body.city,
             email:req.body.email,
-            password:req.body.password
+            password:req.body.password,
+            
         });
         const checkUser = await User.findOne({email:newUser.email})
         if(checkUser){

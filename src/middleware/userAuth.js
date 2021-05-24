@@ -16,7 +16,7 @@ const userAuth = async function(req, res, next){
         req.token = token   //  make token available in request object
         next()
     } catch (error) {
-        res.status(400).send( "authentication required")
+        res.status(400).send( "User authentication required")
     }
 }
 module.exports = userAuth;

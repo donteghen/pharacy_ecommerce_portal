@@ -13,7 +13,7 @@ const cargoAuth = async function(req, res, next){
         req.token = token   //  make token available in request object
         next()
     } catch (error) {
-        res.status(401).send({"error": "authentication required"})
+        res.status(401).send("Cargo authentication required")
     }
 }
 module.exports = cargoAuth;
